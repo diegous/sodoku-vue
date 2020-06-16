@@ -12,12 +12,25 @@
         </div>
       </div>
     </div>
+
+    <br>
+    <button v-on:click="solve">Solve</button>
   </div>
 </template>
 
 <script>
+import SudokuSolver from './assets/SudokuSolver.js'
+
 export default {
   name: 'App',
+  methods: {
+    solve: function() {
+      const board = this.board;
+      const solver = new SudokuSolver(board);
+      solver.solve();
+      this.board = [...board];
+    }
+  },
   data: () => {
     return {
       board: [
