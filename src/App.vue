@@ -5,11 +5,9 @@
            v-bind:key="rowIndex"
            class="row">
 
-        <div v-for="(cell, cellIndex) in row"
-             v-bind:key="cellIndex"
-             class="cell">
-          {{ cell === "." ? "" : cell }}
-        </div>
+        <Cell v-for="(cell, cellIndex) in row"
+              v-bind:key="cellIndex"
+              v-bind:cell="cell"/>
       </div>
     </div>
 
@@ -19,10 +17,14 @@
 </template>
 
 <script>
+import Cell from './components/Cell.vue'
 import SudokuSolver from './assets/SudokuSolver.js'
 
 export default {
   name: 'App',
+  components: {
+    Cell,
+  },
   methods: {
     solve: function() {
       const board = this.board;
@@ -76,15 +78,5 @@ export default {
 .row .cell:nth-child(3n+4) {
   border-left-color: black;
   border-left-width: 2px;
-}
-
-.cell {
-  width: 35px;
-  height: 35px;
-  line-height: 35px;
-
-  border-color: grey;
-  border-style: solid;
-  border-width: 1px;
 }
 </style>
