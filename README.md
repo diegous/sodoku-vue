@@ -1,24 +1,8 @@
-# sudoku
+# Sudoku solver
+A Sudoku solver written in Vue.js
 
-## Project setup
-```
-npm install
-```
+Try it out: https://diegous.github.io/sudoku-vue/
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## ToDo:
+- Allow the user to edit the numbers in the board
+- Load sudokus from some API (maybe [this one](https://github.com/berto/sugoku)?)
