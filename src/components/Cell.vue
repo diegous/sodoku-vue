@@ -1,6 +1,6 @@
 <template>
-  <div class="cell">
-    {{ this.cell === "." ? "" : this.cell }}
+  <div class="cell" v-bind:class="{ original: cell.original }">
+    {{ cell.value === "." ? "" : cell.value }}
   </div>
 </template>
 
@@ -8,7 +8,10 @@
 export default {
   name: 'Cell',
   props: {
-    cell: String
+    cell: {
+      value: String,
+      original: Boolean
+    }
   }
 }
 </script>

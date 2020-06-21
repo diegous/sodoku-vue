@@ -27,10 +27,13 @@ export default {
   },
   methods: {
     solve: function() {
-      const board = this.board;
-      const solver = new SudokuSolver(board);
+      const stringBoard = this.board.map(row => row.map(cell => cell.value));
+      const solver = new SudokuSolver(stringBoard);
       solver.solve();
-      this.board = [...board];
+
+      for (let y = 0; y < 9; y++)
+        for (let x = 0; x < 9; x++)
+          this.board[y][x].value = stringBoard[y][x]
     }
   },
   data: () => {
@@ -45,7 +48,7 @@ export default {
         [".", ".", ".", "1", ".", ".", ".", ".", "."],
         ["1", ".", "7", ".", ".", ".", "9", "4", "5"],
         [".", ".", "5", ".", ".", "9", "8", "3", "."]
-      ]
+      ].map(row => row.map( n => ({ value: n, original: n !== "." }) ))
     }
   }
 }
