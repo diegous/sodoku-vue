@@ -18,12 +18,18 @@ export default {
 
 <style scoped>
 .cell {
-  width: 35px;
-  height: 35px;
-  line-height: 35px;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
 
   border-color: grey;
   border-style: solid;
   border-width: 1px;
+
+  font-size: 2rem;
+}
+
+.original {
+  font-weight: bold;
 }
 </style>
