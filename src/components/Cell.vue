@@ -31,5 +31,6 @@ export default {
 
 .original {
   font-weight: bold;
+  background-color: gainsboro;
 }
 </style>
