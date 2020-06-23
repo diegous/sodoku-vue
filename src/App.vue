@@ -13,12 +13,16 @@
 
     <br>
     <button v-on:click="solve">Solve</button>
+    <button v-on:click="newGame('easy')">New easy</button>
+    <button v-on:click="newGame('medium')">New medium</button>
+    <button v-on:click="newGame('hard')">New hard</button>
   </div>
 </template>
 
 <script>
 import Cell from './components/Cell.vue'
 import SudokuSolver from './assets/SudokuSolver.js'
+import SudokuFetcher from './assets/SudokuFetcher.js'
 
 export default {
   name: 'App',
@@ -34,22 +38,27 @@ export default {
       for (let y = 0; y < 9; y++)
         for (let x = 0; x < 9; x++)
           this.board[y][x].value = stringBoard[y][x]
+    },
+    newGame: async function(difficulty) {
+      const game = await SudokuFetcher(difficulty);
+
+      for (let y = 0; y < 9; y++) {
+        for (let x = 0; x < 9; x++) {
+          this.board[y][x].value = String(game.board[y][x] || ".");
+          this.board[y][x].original = game.board[y][x] != 0;
+        }
+      }
     }
   },
   data: () => {
     return {
-      board: [
-        [".", "9", ".", ".", "6", "2", ".", ".", "."],
-        ["3", ".", "6", "5", ".", ".", ".", "9", "."],
-        [".", ".", ".", ".", ".", "8", "2", ".", "."],
-        [".", ".", "2", ".", ".", ".", "1", ".", "9"],
-        ["5", ".", "3", "2", "9", "6", ".", ".", "."],
-        ["8", "7", "9", ".", ".", ".", ".", "2", "."],
-        [".", ".", ".", "1", ".", ".", ".", ".", "."],
-        ["1", ".", "7", ".", ".", ".", "9", "4", "5"],
-        [".", ".", "5", ".", ".", "9", "8", "3", "."]
-      ].map(row => row.map( n => ({ value: n, original: n !== "." }) ))
+      board: new Array(9).fill().map(() =>
+               new Array(9).fill().map(() => ({ value: ".", original: false }))
+             )
     }
+  },
+  created: async function() {
+    this.newGame("easy");
   }
 }
 </script>
