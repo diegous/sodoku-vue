@@ -1,5 +1,7 @@
 <template>
-  <div class="cell" v-bind:class="{ original: cell.original }">
+  <div class="cell"
+    v-on:click="clicked"
+    v-bind:class="{ original: cell.original, selected: selectedClass }">
     {{ cell.value === "." ? "" : cell.value }}
   </div>
 </template>
@@ -8,9 +10,22 @@
 export default {
   name: 'Cell',
   props: {
+    x: Number,
+    y: Number,
     cell: {
       value: String,
-      original: Boolean
+      original: Boolean,
+      selected: Boolean,
+    },
+  },
+  computed: {
+    selectedClass: function() {
+      return !this.cell.original && this.cell.selected;
+    },
+  },
+  methods: {
+    clicked: function() {
+      this.$emit("update:selected", { x: this.x, y: this.y })
     }
   }
 }
@@ -32,5 +47,9 @@ export default {
 .original {
   font-weight: bold;
   background-color: gainsboro;
+}
+
+.selected {
+  background-color: lightblue;
 }
 </style>

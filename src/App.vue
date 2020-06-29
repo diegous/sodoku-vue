@@ -6,7 +6,10 @@
            class="row">
 
         <Cell v-for="(cell, cellIndex) in row"
+              v-on:update:selected="updateSelected"
               v-bind:key="cellIndex"
+              v-bind:x="cellIndex"
+              v-bind:y="rowIndex"
               v-bind:cell="cell"/>
       </div>
     </div>
@@ -41,6 +44,8 @@ export default {
     },
     newGame: async function(difficulty) {
       const game = await SudokuFetcher(difficulty);
+      this.selected.x = null;
+      this.selected.y = null;
 
       for (let y = 0; y < 9; y++) {
         for (let x = 0; x < 9; x++) {
@@ -48,16 +53,40 @@ export default {
           this.board[y][x].original = game.board[y][x] != 0;
         }
       }
+    },
+    selectedCell: function() {
+      return this.board[this.selected.y][this.selected.x];
+    },
+    updateSelected: function({ x, y }) {
+      if (Number.isInteger(this.selected.y) &&
+          Number.isInteger(this.selected.x))
+        this.selectedCell().selected = false;
+
+      this.selected.x = x;
+      this.selected.y = y;
+      this.selectedCell().selected = true;
+    },
+    updateCellValue: function({ key }) {
+      if (!Number.isInteger(this.selected.y)) return;
+      if (!Number.isInteger(this.selected.x)) return;
+      if (this.selectedCell().original) return;
+
+      if ("123456789".indexOf(key) >= 0)
+        this.selectedCell().value = key;
+      else if (key === "Delete" || key === "Backspace")
+        this.selectedCell().value = ".";
     }
   },
   data: () => {
     return {
+      selected: { x: null, y: null },
       board: new Array(9).fill().map(() =>
-               new Array(9).fill().map(() => ({ value: ".", original: false }))
+               new Array(9).fill().map(() => ({ value: ".", original: false, selected: false }))
              )
     }
   },
   created: async function() {
+    window.addEventListener('keydown', this.updateCellValue);
     this.newGame("easy");
   }
 }
