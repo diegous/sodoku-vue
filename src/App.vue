@@ -26,6 +26,7 @@
 import Cell from './components/Cell.vue'
 import SudokuSolver from './assets/SudokuSolver.js'
 import SudokuFetcher from './assets/SudokuFetcher.js'
+import validBoard from './assets/validBoard.js'
 
 export default {
   name: 'App',
@@ -33,8 +34,11 @@ export default {
     Cell,
   },
   methods: {
+    plainBoard: function() {
+      return this.board.map(row => row.map(cell => cell.value))
+    },
     solve: function() {
-      const stringBoard = this.board.map(row => row.map(cell => cell.value));
+      const stringBoard = this.plainBoard();
       const solver = new SudokuSolver(stringBoard);
       solver.solve();
 
@@ -71,18 +75,29 @@ export default {
       if (!Number.isInteger(this.selected.x)) return;
       if (this.selectedCell().original) return;
 
-      if ("123456789".indexOf(key) >= 0)
+      if ("123456789".indexOf(key) >= 0) {
         this.selectedCell().value = key;
-      else if (key === "Delete" || key === "Backspace")
+        this.selectedCell().error = !validBoard(this.plainBoard());
+      } else if (key === "Delete" || key === "Backspace") {
         this.selectedCell().value = ".";
+        this.selectedCell().error = false;
+      }
     }
   },
   data: () => {
     return {
       selected: { x: null, y: null },
-      board: new Array(9).fill().map(() =>
-               new Array(9).fill().map(() => ({ value: ".", original: false, selected: false }))
-             )
+      board:
+        new Array(9).fill().map(() =>
+          new Array(9).fill().map(() => {
+            return {
+              value: ".",
+              original: false,
+              selected: false,
+              error: false
+            }
+          })
+        )
     }
   },
   created: async function() {

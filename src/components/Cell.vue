@@ -1,7 +1,7 @@
 <template>
   <div class="cell"
     v-on:click="clicked"
-    v-bind:class="{ original: cell.original, selected: selectedClass }">
+    v-bind:class="classObject">
     {{ cell.value === "." ? "" : cell.value }}
   </div>
 </template>
@@ -19,9 +19,13 @@ export default {
     },
   },
   computed: {
-    selectedClass: function() {
-      return !this.cell.original && this.cell.selected;
-    },
+    classObject: function() {
+      return {
+        error: this.cell.error,
+        original: this.cell.original,
+        selected: !this.cell.original && this.cell.selected,
+      }
+    }
   },
   methods: {
     clicked: function() {
@@ -51,5 +55,9 @@ export default {
 
 .selected {
   background-color: lightblue;
+}
+
+.error {
+  color: crimson;
 }
 </style>
